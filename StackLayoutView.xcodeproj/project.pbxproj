@@ -12,6 +12,7 @@
 		B0B13FC41E45BFBC00241E8F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0B13FC21E45BFBC00241E8F /* Main.storyboard */; };
 		B0B13FC61E45BFBC00241E8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0B13FC51E45BFBC00241E8F /* Assets.xcassets */; };
 		B0B13FC91E45BFBC00241E8F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0B13FC71E45BFBC00241E8F /* LaunchScreen.storyboard */; };
+		B0B13FD21E45C92E00241E8F /* UIStackLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B13FD11E45C92E00241E8F /* UIStackLayoutView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		B0B13FC51E45BFBC00241E8F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B0B13FC81E45BFBC00241E8F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B0B13FCA1E45BFBC00241E8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B0B13FD11E45C92E00241E8F /* UIStackLayoutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIStackLayoutView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +40,7 @@
 		B0B13FB21E45BFBC00241E8F = {
 			isa = PBXGroup;
 			children = (
+				B0B13FD01E45C91C00241E8F /* UIStackLayoutView */,
 				B0B13FBD1E45BFBC00241E8F /* StackLayoutView */,
 				B0B13FBC1E45BFBC00241E8F /* Products */,
 			);
@@ -62,6 +65,14 @@
 				B0B13FCA1E45BFBC00241E8F /* Info.plist */,
 			);
 			path = StackLayoutView;
+			sourceTree = "<group>";
+		};
+		B0B13FD01E45C91C00241E8F /* UIStackLayoutView */ = {
+			isa = PBXGroup;
+			children = (
+				B0B13FD11E45C92E00241E8F /* UIStackLayoutView.swift */,
+			);
+			path = UIStackLayoutView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0B13FC11E45BFBC00241E8F /* ViewController.swift in Sources */,
+				B0B13FD21E45C92E00241E8F /* UIStackLayoutView.swift in Sources */,
 				B0B13FBF1E45BFBC00241E8F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,7 +273,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = P7TTM4H4X2;
 				INFOPLIST_FILE = StackLayoutView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.fireflykids.StackLayoutView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -275,7 +287,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = P7TTM4H4X2;
 				INFOPLIST_FILE = StackLayoutView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.fireflykids.StackLayoutView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -302,6 +314,7 @@
 				B0B13FCF1E45BFBC00241E8F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
