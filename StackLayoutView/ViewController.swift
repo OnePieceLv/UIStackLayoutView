@@ -12,6 +12,7 @@ class ViewController: UIViewController {
 
     var layoutView: UIStackLayoutView = UIStackLayoutView()
     
+    @IBOutlet weak var linearView: UIStackLayoutView!
     @IBOutlet weak var spaceInset: UIStepper!
     
     @IBOutlet weak var container: UIView!
@@ -33,9 +34,9 @@ class ViewController: UIViewController {
     
     @IBAction func changeAxis(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
-            layoutView.axis = .horizontal
+            linearView.axis = .horizontal
         }else {
-            layoutView.axis = .vertical
+            linearView.axis = .vertical
         }
     }
     
@@ -44,11 +45,11 @@ class ViewController: UIViewController {
         
         switch sender.selectedSegmentIndex {
         case 0:
-            layoutView.align = .leading
+            linearView.align = .leading
         case 1:
-            layoutView.align = .trailing
+            linearView.align = .trailing
         case 2:
-            layoutView.align = .center
+            linearView.align = .center
         default:
             break
         }
@@ -57,12 +58,12 @@ class ViewController: UIViewController {
     
     @IBAction func changeInset(_ sender: UIStepper) {
         let padding = CGFloat(sender.value)
-        layoutView.padding = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
+        linearView.padding = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         
     }
 
     @IBAction func changeSpacing(_ sender: UIStepper) {
-        layoutView.spacing = CGFloat(sender.value)
+        linearView.spacing = CGFloat(sender.value)
 
     }
     
@@ -74,16 +75,16 @@ class ViewController: UIViewController {
         let point = sender.convert(CGPoint.init(x: sender.frame.width/2 , y: sender.frame.height/2 ), to: layoutView)
         let label = UILabel(frame: CGRect(origin: point, size: CGSize.zero))
         label.font = UIFont.systemFont(ofSize: maxNumber)
-        let count = layoutView.subviews.count
+        let count = linearView.subviews.count
         let start = text.index(text.startIndex, offsetBy: count % text.characters.count)
         let end = text.index(start, offsetBy: 1)
         let range = Range(uncheckedBounds: (lower: start, upper: end))
         label.text = text.substring(with: range)
-        label.backgroundColor = UIColor(hue: CGFloat(layoutView.subviews.count % 10 / 10), saturation: 1, brightness: 1, alpha: 1)
+        label.backgroundColor = UIColor(hue: CGFloat(linearView.subviews.count % 10 / 10), saturation: 1, brightness: 1, alpha: 1)
         let tap = UITapGestureRecognizer(target: self, action: #selector(subviewDidTap(sender:)))
         label.addGestureRecognizer(tap)
         label.isUserInteractionEnabled = true
-        layoutView.addSubview(label)
+        linearView.addSubview(label)
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }

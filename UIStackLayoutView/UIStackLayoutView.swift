@@ -11,7 +11,7 @@ import UIKit
 public enum UIStackLayoutAlign: Int {
     case leading = 0
     case trailing = 1
-    case center
+    case center = 2
     static var top: UIStackLayoutAlign {
         get {
             return .leading
@@ -27,7 +27,18 @@ public enum UIStackLayoutAlign: Int {
 @IBDesignable
 public class UIStackLayoutView: UIView {
     
-    @IBInspectable public var axis: UILayoutConstraintAxis = .horizontal {
+    @IBInspectable public var isVertical: Bool = false {
+        didSet {
+            if isVertical {
+                self.axis = .vertical
+            }else {
+                self.axis = .horizontal
+            }
+        }
+    }
+    
+    
+    public var axis: UILayoutConstraintAxis = .horizontal {
         didSet {
             guard oldValue != axis else {
                 return
@@ -35,8 +46,15 @@ public class UIStackLayoutView: UIView {
             arrangedSubviewUpdateConstraints()
         }
     }
+    @IBInspectable public var alignNumber: Int = 0 {
+        didSet {
+            if let align = UIStackLayoutAlign(rawValue: alignNumber) {
+                self.align = align
+            }
+        }
+    }
     
-    @IBInspectable public var align: UIStackLayoutAlign = .leading {
+    public var align: UIStackLayoutAlign = .leading {
         didSet {
             guard oldValue != align else {
                 return

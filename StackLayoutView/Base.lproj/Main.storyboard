@@ -27,75 +27,135 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4vb-OZ-lWE">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nV7-fa-tWS">
-                                                <rect key="frame" x="54" y="51" width="131" height="30"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="add subview"/>
-                                                <connections>
-                                                    <action selector="addsubviewClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zpF-N7-0xG"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TQG-ET-QpD">
-                                                <rect key="frame" x="220" y="51" width="103" height="30"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="clear"/>
-                                                <connections>
-                                                    <action selector="clearSubviewClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pSy-NS-xWo"/>
-                                                </connections>
-                                            </button>
-                                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="u0F-Pk-C36">
-                                                <rect key="frame" x="90" y="111" width="185" height="29"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <segments>
-                                                    <segment title="Horizontal"/>
-                                                    <segment title="vertical"/>
-                                                </segments>
-                                                <connections>
-                                                    <action selector="changeAxis:" destination="BYZ-38-t0r" eventType="valueChanged" id="JrU-98-rtA"/>
-                                                </connections>
-                                            </segmentedControl>
-                                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="wl3-QO-z1U">
-                                                <rect key="frame" x="90" y="188" width="185" height="29"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <segments>
-                                                    <segment title="leading"/>
-                                                    <segment title="trailing"/>
-                                                    <segment title="center"/>
-                                                </segments>
-                                                <connections>
-                                                    <action selector="changeAlign:" destination="BYZ-38-t0r" eventType="valueChanged" id="bQ5-2D-0n7"/>
-                                                </connections>
-                                            </segmentedControl>
-                                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="VYx-KB-TwI">
-                                                <rect key="frame" x="135" y="252" width="94" height="29"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <connections>
-                                                    <action selector="changeInset:" destination="BYZ-38-t0r" eventType="valueChanged" id="CdT-3x-BdI"/>
-                                                </connections>
-                                            </stepper>
-                                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="8yN-Tu-6Aa">
-                                                <rect key="frame" x="135" y="320" width="94" height="29"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <connections>
-                                                    <action selector="changeSpacing:" destination="BYZ-38-t0r" eventType="valueChanged" id="Xo2-L5-0pU"/>
-                                                </connections>
-                                            </stepper>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="inset" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xsO-LA-PWh">
-                                                <rect key="frame" x="161" y="224" width="42" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="space" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VVU-72-cRs">
-                                                <rect key="frame" x="161" y="289" width="50" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IjV-eH-sKV" customClass="UIStackLayoutView" customModule="StackLayoutView" customModuleProvider="target">
+                                                <rect key="frame" x="87.5" y="32" width="200" height="30"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nV7-fa-tWS">
+                                                        <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="100" id="W1e-kC-75q"/>
+                                                            <constraint firstAttribute="height" constant="30" id="isy-2B-T9u"/>
+                                                        </constraints>
+                                                        <state key="normal" title="add subview"/>
+                                                        <connections>
+                                                            <action selector="addsubviewClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zpF-N7-0xG"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TQG-ET-QpD">
+                                                        <rect key="frame" x="100" y="0.0" width="100" height="30"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="100" id="hgN-9V-ozp"/>
+                                                            <constraint firstAttribute="height" constant="30" id="hmn-pY-0ED"/>
+                                                        </constraints>
+                                                        <state key="normal" title="clear"/>
+                                                        <connections>
+                                                            <action selector="clearSubviewClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pSy-NS-xWo"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="spacing">
+                                                        <real key="value" value="0.0"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isVertical" value="NO"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LgQ-iN-pi7" customClass="UIStackLayoutView" customModule="StackLayoutView" customModuleProvider="target">
+                                                <rect key="frame" x="94.5" y="82" width="185" height="216"/>
+                                                <subviews>
+                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="u0F-Pk-C36">
+                                                        <rect key="frame" x="0.0" y="0.0" width="185" height="29"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="185" id="Zsa-pQ-Zkq"/>
+                                                        </constraints>
+                                                        <segments>
+                                                            <segment title="Horizontal"/>
+                                                            <segment title="vertical"/>
+                                                        </segments>
+                                                        <connections>
+                                                            <action selector="changeAxis:" destination="BYZ-38-t0r" eventType="valueChanged" id="JrU-98-rtA"/>
+                                                        </connections>
+                                                    </segmentedControl>
+                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="wl3-QO-z1U">
+                                                        <rect key="frame" x="0.0" y="38" width="185" height="29"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="185" id="ppN-p7-qM0"/>
+                                                        </constraints>
+                                                        <segments>
+                                                            <segment title="leading"/>
+                                                            <segment title="trailing"/>
+                                                            <segment title="center"/>
+                                                        </segments>
+                                                        <connections>
+                                                            <action selector="changeAlign:" destination="BYZ-38-t0r" eventType="valueChanged" id="bQ5-2D-0n7"/>
+                                                        </connections>
+                                                    </segmentedControl>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="inset" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xsO-LA-PWh">
+                                                        <rect key="frame" x="69" y="74" width="42" height="21"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="VYx-KB-TwI">
+                                                        <rect key="frame" x="45.5" y="107" width="94" height="29"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="94" id="98z-cn-Ywu"/>
+                                                            <constraint firstAttribute="height" constant="29" id="OOS-4Z-bG3"/>
+                                                        </constraints>
+                                                        <connections>
+                                                            <action selector="changeInset:" destination="BYZ-38-t0r" eventType="valueChanged" id="CdT-3x-BdI"/>
+                                                        </connections>
+                                                    </stepper>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="space" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VVU-72-cRs">
+                                                        <rect key="frame" x="68" y="144" width="50" height="21"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="8yN-Tu-6Aa">
+                                                        <rect key="frame" x="45.5" y="177" width="94" height="29"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="29" id="bEt-cD-G30"/>
+                                                            <constraint firstAttribute="width" constant="94" id="jAp-vl-NKr"/>
+                                                        </constraints>
+                                                        <connections>
+                                                            <action selector="changeSpacing:" destination="BYZ-38-t0r" eventType="valueChanged" id="Xo2-L5-0pU"/>
+                                                        </connections>
+                                                    </stepper>
+                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DQG-Tr-ZYh" customClass="UIStackLayoutView" customModule="StackLayoutView" customModuleProvider="target">
+                                                        <rect key="frame" x="88.5" y="212" width="0.0" height="0.0"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="alignNumber">
+                                                                <integer key="value" value="1"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isVertical" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </view>
+                                                </subviews>
+                                                <color key="backgroundColor" red="0.41568627450000001" green="0.82745098039999998" blue="0.23137254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="spacing">
+                                                        <real key="value" value="10"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="alignNumber">
+                                                        <integer key="value" value="2"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isVertical" value="YES"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="LgQ-iN-pi7" firstAttribute="centerX" secondItem="4vb-OZ-lWE" secondAttribute="centerX" id="6jf-RC-FRT"/>
+                                            <constraint firstItem="LgQ-iN-pi7" firstAttribute="top" secondItem="IjV-eH-sKV" secondAttribute="bottom" constant="20" id="DJl-A3-g1T"/>
+                                            <constraint firstItem="IjV-eH-sKV" firstAttribute="top" secondItem="4vb-OZ-lWE" secondAttribute="top" constant="32" id="kMm-bo-5NU"/>
+                                            <constraint firstItem="IjV-eH-sKV" firstAttribute="centerX" secondItem="4vb-OZ-lWE" secondAttribute="centerX" id="yEm-N8-v5a"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -118,6 +178,7 @@
                     </view>
                     <connections>
                         <outlet property="container" destination="4vb-OZ-lWE" id="sjw-d9-keH"/>
+                        <outlet property="linearView" destination="DQG-Tr-ZYh" id="itw-3p-uGU"/>
                         <outlet property="spaceInset" destination="8yN-Tu-6Aa" id="OXV-Kt-OVA"/>
                     </connections>
                 </viewController>
