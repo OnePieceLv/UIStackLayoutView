@@ -71,6 +71,8 @@ public class UIStackLayoutView: UIView {
     
     fileprivate(set) var subViewConstraints: [NSLayoutConstraint] = []
     
+    fileprivate(set) var centerConstraints: [NSLayoutConstraint] = []
+    
     fileprivate(set) var arrangedSubviews: [UIView] = []
     
     
@@ -128,12 +130,14 @@ public class UIStackLayoutView: UIView {
         removeConstraints(spaceConstraints)
         removeConstraints(sizeConstraints)
         removeConstraints(subViewConstraints)
+        removeConstraints(centerConstraints)
         buildConstraints()
         updateConstraintsConstant()
         addConstraints(insetConstraints)
         addConstraints(spaceConstraints)
         addConstraints(sizeConstraints)
         addConstraints(subViewConstraints)
+        addConstraints(centerConstraints)
         // call super.updateConstraints as final step in your implementation
         super.updateConstraints()
     }
@@ -157,6 +161,7 @@ private extension UIStackLayoutView {
         var spaceConstraints = [NSLayoutConstraint]()
         var sizeConstraints = [NSLayoutConstraint]()
         var subViewConstraints = [NSLayoutConstraint]()
+        var centerConstraints = [NSLayoutConstraint]()
         
         /// priority
         let decrease = Priority.nestDecrease * self.nestDepth()
@@ -169,7 +174,9 @@ private extension UIStackLayoutView {
         let axialAttriStart: NSLayoutAttribute = (axis == .horizontal) ? .leading : .top
         let axialAttriEnd: NSLayoutAttribute = (axis == .horizontal) ? .trailing : .bottom
         /// align
-        let alignEnd: Bool = (self.align == .trailing) || (self.align == .bottom)
+        let alignEnd: Bool = (align == .trailing) || (align == .bottom)
+        
+        let alignCenter: Bool = (align == .center)
         
         var previous: UIView?
         let count = subviews.count
@@ -237,11 +244,18 @@ private extension UIStackLayoutView {
                 })
             }
             
+            if alignCenter {
+                let attributed: NSLayoutAttribute = (axis == .horizontal) ? .centerY : .centerX
+                let center = NSLayoutConstraint(item: $0.element, attribute: attributed, relatedBy: .equal, toItem: self, attribute: attributed, multiplier: 1.0, constant: 0)
+                centerConstraints.append(center)
+                center.priority = medium
+            }
+            
             if !isValidIntrinsicContentSize(size: $0.element.intrinsicContentSize) {
                 
                 if !($0.element is UIStackLayoutView) {
-                    let widthHug = NSLayoutConstraint(item: $0, attribute: .width, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .width, multiplier: 1.0, constant: 0)
-                    let heightHug = NSLayoutConstraint(item: $0, attribute: .height, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .height, multiplier: 1.0, constant: 0)
+                    let widthHug = NSLayoutConstraint(item: $0.element, attribute: .width, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .width, multiplier: 1.0, constant: 0)
+                    let heightHug = NSLayoutConstraint(item: $0.element, attribute: .height, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .height, multiplier: 1.0, constant: 0)
                     subViewConstraints.append(widthHug)
                     subViewConstraints.append(heightHug)
                     widthHug.priority = huggingHorizontal
@@ -274,10 +288,12 @@ private extension UIStackLayoutView {
         self.spaceConstraints.removeAll()
         self.sizeConstraints.removeAll()
         self.subViewConstraints.removeAll()
+        self.centerConstraints.removeAll()
         self.insetConstraints.append(contentsOf: insetConstraints)
         self.spaceConstraints.append(contentsOf: spaceConstraints)
         self.sizeConstraints.append(contentsOf: sizeConstraints)
         self.subViewConstraints.append(contentsOf: subViewConstraints)
+        self.centerConstraints.append(contentsOf: centerConstraints)
     }
     
     func updateConstraintsConstant() -> Void {
