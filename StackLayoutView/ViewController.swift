@@ -19,14 +19,14 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        container.addSubview(layoutView)
-        layoutView.backgroundColor = UIColor.cyan
-        layoutView.translatesAutoresizingMaskIntoConstraints = false
-//        layoutView.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: 0).isActive = true
-        let centerX = NSLayoutConstraint(item: layoutView, attribute: .centerX, relatedBy: .equal, toItem: container, attribute: .centerX, multiplier: 1.0, constant: 0)
-        container.addConstraint(centerX)
-        let bottom = NSLayoutConstraint(item: layoutView, attribute: .top, relatedBy: .equal, toItem: spaceInset, attribute: .bottom, multiplier: 1.0, constant: 20)
-        container.addConstraint(bottom)
+//        container.addSubview(layoutView)
+//        layoutView.backgroundColor = UIColor.cyan
+//        layoutView.translatesAutoresizingMaskIntoConstraints = false
+////        layoutView.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: 0).isActive = true
+//        let centerX = NSLayoutConstraint(item: layoutView, attribute: .centerX, relatedBy: .equal, toItem: container, attribute: .centerX, multiplier: 1.0, constant: 0)
+//        container.addConstraint(centerX)
+//        let bottom = NSLayoutConstraint(item: layoutView, attribute: .top, relatedBy: .equal, toItem: spaceInset, attribute: .bottom, multiplier: 1.0, constant: 20)
+//        container.addConstraint(bottom)
         
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -91,14 +91,18 @@ class ViewController: UIViewController {
     }
     
     func subviewDidTap(sender: UITapGestureRecognizer) -> Void {
-        sender.view?.removeFromSuperview()
+//        sender.view?.removeFromSuperview()
+        sender.view?.isHidden = true
         UIView.animate(withDuration: 0.3) { 
             self.view.layoutIfNeeded()
         }
     }
     
     @IBAction func clearSubviewClick(_ sender: UIButton) {
-        
+        self.linearView.subviews.forEach({ $0.removeFromSuperview() })
+        UIView.animate(withDuration: 0.3) { 
+            self.view.layoutIfNeeded()
+        }
     }
     
 }

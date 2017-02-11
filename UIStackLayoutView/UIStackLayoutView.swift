@@ -68,7 +68,7 @@ public class UIStackLayoutView: UIView {
             guard oldValue != spacing else {
                 return
             }
-            updateConstraintsConstant()
+            arrangedSubviewUpdateConstraints()
         }
     }
     
@@ -93,6 +93,9 @@ public class UIStackLayoutView: UIView {
     
     fileprivate(set) var arrangedSubviews: [UIView] = []
     
+    fileprivate var hiddenSubviews: [UIView] = []
+    
+    fileprivate var originalSubviews: [UIView] = []
     
     private var NSIBPrototypingLayoutConstraint: AnyClass? {
         get {
@@ -128,34 +131,33 @@ public class UIStackLayoutView: UIView {
         #if !TARGET_INTERFACE_BUILDER
             subview.translatesAutoresizingMaskIntoConstraints = false
         #endif
-        arrangedSubviews.append(subview)
+        originalSubviews.append(subview)
+        arrangedSubviews = originalSubviews
         arrangedSubviewUpdateConstraints()
+        registerListen(view: subview)
         
     }
     
     public override func willRemoveSubview(_ subview: UIView) {
         super.willRemoveSubview(subview)
-        if let index = arrangedSubviews.index(of: subview) {
-            arrangedSubviews.remove(at: index)
-        }
+        originalSubviews = originalSubviews.filter({$0 != subview })
+        arrangedSubviews = originalSubviews
         arrangedSubviewUpdateConstraints()
+        unregisterListen(view: subview)
         
     }
     
     public override func updateConstraints() {
         
-        removeConstraints(insetConstraints)
-        removeConstraints(spaceConstraints)
-        removeConstraints(sizeConstraints)
-        removeConstraints(subViewConstraints)
-        removeConstraints(centerConstraints)
+        // fix bug: 这里不可以创建一个临时的数组，比如 let constraintsList = [insetConstraints,spaceConstraints,sizeConstraints,subViewConstraints,centerConstraints] 因为这个数组里的值是不变得，所以 addConstraints 时 insetConstraints 里是空
+        
+        allConstraints().forEach { removeConstraints($0) }
+        
         buildConstraints()
         updateConstraintsConstant()
-        addConstraints(insetConstraints)
-        addConstraints(spaceConstraints)
-        addConstraints(sizeConstraints)
-        addConstraints(subViewConstraints)
-        addConstraints(centerConstraints)
+        
+        allConstraints().forEach { addConstraints($0) }
+
         // call super.updateConstraints as final step in your implementation
         super.updateConstraints()
     }
@@ -163,6 +165,18 @@ public class UIStackLayoutView: UIView {
 }
 
 private extension UIStackLayoutView {
+    
+    func allConstraints() -> [[NSLayoutConstraint]] {
+        
+        let constraintsList = [
+            insetConstraints,
+            spaceConstraints,
+            sizeConstraints,
+            subViewConstraints,
+            centerConstraints
+        ]
+        return constraintsList
+    }
     
     enum Priority {
         static let baseWeak: Float = 100
@@ -197,18 +211,19 @@ private extension UIStackLayoutView {
         let alignCenter: Bool = (align == .center)
         
         var previous: UIView?
-        let count = subviews.count
-        subviews.enumerated().forEach {
+        let count = arrangedSubviews.count
+        for (offset, subview) in arrangedSubviews.enumerated() {
             
-            let huggingVertical = $0.element.contentHuggingPriority(for: .vertical)
-            let huggingHorizontal = $0.element.contentHuggingPriority(for: .horizontal)
-            let compressionVertical = $0.element.contentCompressionResistancePriority(for: .vertical)
-            let compressionHorizontal = $0.element.contentCompressionResistancePriority(for: .horizontal)
+            let huggingVertical = subview.contentHuggingPriority(for: .vertical)
+            let huggingHorizontal = subview.contentHuggingPriority(for: .horizontal)
+            let compressionVertical = subview.contentCompressionResistancePriority(for: .vertical)
+            let compressionHorizontal = subview.contentCompressionResistancePriority(for: .horizontal)
             
             let nonAxailHugging = (axis == .horizontal) ? huggingVertical : huggingHorizontal
             let nonAxailCompression = (axis == .horizontal) ? compressionVertical : compressionHorizontal
-            for relation in [NSLayoutRelation.lessThanOrEqual, .greaterThanOrEqual] {
-                self.buildConstraints(item: $0.element, attribute: nonAxialAttriStart, relatedBy: relation, toItem: self, attribute: nonAxialAttriStart, block: { (start: NSLayoutConstraint) in
+            let relations = [NSLayoutRelation.lessThanOrEqual, .greaterThanOrEqual]
+            for relation in  relations {
+                self.buildConstraints(item: subview, attribute: nonAxialAttriStart, relatedBy: relation, toItem: self, attribute: nonAxialAttriStart, block: { (start: NSLayoutConstraint) in
                     insetConstraints.append(start)
                     start.priority = nonAxailCompression > Priority.baseStrong ? medium : strong
                     if relation == .lessThanOrEqual {
@@ -216,8 +231,8 @@ private extension UIStackLayoutView {
                     }
                 })
             }
-            for relation in [NSLayoutRelation.lessThanOrEqual, .greaterThanOrEqual] {
-                self.buildConstraints(item: self, attribute: nonAxialAttriEnd, relatedBy: relation, toItem: $0.element, attribute: nonAxialAttriEnd, block: { (end: NSLayoutConstraint) in
+            for relation in relations {
+                self.buildConstraints(item: self, attribute: nonAxialAttriEnd, relatedBy: relation, toItem: subview, attribute: nonAxialAttriEnd, block: { (end: NSLayoutConstraint) in
                     insetConstraints.append(end)
                     end.priority = nonAxailHugging < Priority.baseStrong ? medium : strong
                     if relation == .lessThanOrEqual {
@@ -226,12 +241,13 @@ private extension UIStackLayoutView {
 
                     let delta = alignEnd ? Priority.alignIncrease : -Priority.alignIncrease
                     end.priority += delta
+
                 })
             }
             
-            if $0.offset == 0 {
+            if offset == 0 {
                 for relation in [NSLayoutRelation.equal] {
-                    self.buildConstraints(item: $0.element, attribute: axialAttriStart, relatedBy: relation, toItem: self, attribute: axialAttriStart, block: { (start:NSLayoutConstraint) in
+                    self.buildConstraints(item: subview, attribute: axialAttriStart, relatedBy: relation, toItem: self, attribute: axialAttriStart, block: { (start:NSLayoutConstraint) in
                         insetConstraints.append(start)
                         start.priority = strong
                         if relation == .lessThanOrEqual {
@@ -241,9 +257,9 @@ private extension UIStackLayoutView {
                 }
             }
             
-            if $0.offset == count - 1 {
+            if offset == count - 1 {
                 for relation in [NSLayoutRelation.equal] {
-                    self.buildConstraints(item: self, attribute: axialAttriEnd, relatedBy: relation, toItem: $0.element, attribute: axialAttriEnd, block: { (end: NSLayoutConstraint) in
+                    self.buildConstraints(item: self, attribute: axialAttriEnd, relatedBy: relation, toItem: subview, attribute: axialAttriEnd, block: { (end: NSLayoutConstraint) in
                         insetConstraints.append(end)
                         end.priority = strong
                         if relation == .lessThanOrEqual {
@@ -256,7 +272,7 @@ private extension UIStackLayoutView {
             }
             
             if let lastView = previous {
-                self.buildConstraints(item: $0.element, attribute: axialAttriStart, toItem: lastView, attribute: axialAttriEnd, block: { (space:NSLayoutConstraint) in
+                self.buildConstraints(item: subview, attribute: axialAttriStart, toItem: lastView, attribute: axialAttriEnd, block: { (space:NSLayoutConstraint) in
                     spaceConstraints.append(space)
                     space.priority = strong + Priority.spaceIncrease
                 })
@@ -264,16 +280,16 @@ private extension UIStackLayoutView {
             
             if alignCenter {
                 let attributed: NSLayoutAttribute = (axis == .horizontal) ? .centerY : .centerX
-                let center = NSLayoutConstraint(item: $0.element, attribute: attributed, relatedBy: .equal, toItem: self, attribute: attributed, multiplier: 1.0, constant: 0)
+                let center = NSLayoutConstraint(item: subview, attribute: attributed, relatedBy: .equal, toItem: self, attribute: attributed, multiplier: 1.0, constant: 0)
                 centerConstraints.append(center)
                 center.priority = medium
             }
             
-            if !isValidIntrinsicContentSize(size: $0.element.intrinsicContentSize) {
+            if !isValidIntrinsicContentSize(size: subview.intrinsicContentSize) {
                 
-                if !($0.element is UIStackLayoutView) {
-                    let widthHug = NSLayoutConstraint(item: $0.element, attribute: .width, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .width, multiplier: 1.0, constant: 0)
-                    let heightHug = NSLayoutConstraint(item: $0.element, attribute: .height, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .height, multiplier: 1.0, constant: 0)
+                if !(subview is UIStackLayoutView) {
+                    let widthHug = NSLayoutConstraint(item: subview, attribute: .width, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .width, multiplier: 1.0, constant: 0)
+                    let heightHug = NSLayoutConstraint(item: subview, attribute: .height, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .height, multiplier: 1.0, constant: 0)
                     subViewConstraints.append(widthHug)
                     subViewConstraints.append(heightHug)
                     widthHug.priority = huggingHorizontal
@@ -281,7 +297,14 @@ private extension UIStackLayoutView {
                 }
             }
             
-            previous = $0.element
+            if isHidden(view: subview) {
+                let width = NSLayoutConstraint(item: subview, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 0)
+                let height = NSLayoutConstraint(item: subview, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 0)
+                subViewConstraints.append(width)
+                subViewConstraints.append(height)
+            }
+            
+            previous = subview
         }
         
         
@@ -331,9 +354,15 @@ private extension UIStackLayoutView {
             }
         }
         
-        spaceConstraints.forEach{ $0.constant = spacing }
+        spaceConstraints.forEach{
+            $0.constant = spacing
+            if isHidden(view: $0.firstItem as? UIView) {
+                $0.constant = 0.0
+            }
+        }
         
-        let totalSpacing = subviews.count > 1 ? spacing * CGFloat(subviews.count - 1) : 0
+        
+        let totalSpacing = spaceConstraints.map({$0.constant}).reduce(0, +)//subviews.count > 1 ? spacing * CGFloat(subviews.count - 1) : 0
         sizeConstraints.forEach {
             if $0.firstAttribute == .width {
                 $0.constant = padding.left + padding.right + (axis == .horizontal ? totalSpacing : 0)
@@ -379,6 +408,39 @@ private extension UIStackLayoutView {
     func isValidIntrinsicContentSize(size: CGSize) -> Bool {
         return !(size.width < 0 || size.height < 0)
     }
+}
+
+private var kvoContext = UInt8()
+
+extension UIStackLayoutView {
+    
+    func registerListen(view: UIView) -> Void {
+        view.addObserver(self, forKeyPath:"hidden", options: [.new,.old], context: &kvoContext)
+    }
+    
+    func unregisterListen(view: UIView) -> Void {
+        view.removeObserver(self, forKeyPath: "hidden", context: &kvoContext)
+    }
+    
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if let view = object as? UIView, let change = change, keyPath == "hidden" {
+            let hidden = view.isHidden
+            let previous = change[.oldKey] as? Bool
+            guard let previousHidden = previous, previousHidden != hidden else {
+                return
+            }
+            
+            arrangedSubviewUpdateConstraints()
+        }
+    }
+    
+    func isHidden(view: UIView?) -> Bool {
+        if let currentView = view {
+            return currentView.isHidden
+        }
+        return false
+    }
+    
 }
 
 extension UIStackLayoutView {
