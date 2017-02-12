@@ -72,7 +72,7 @@ class ViewController: UIViewController {
         let end = text.index(start, offsetBy: 1)
         let range = Range(uncheckedBounds: (lower: start, upper: end))
         label.text = text.substring(with: range)
-        label.text = text
+//        label.text = text
         label.backgroundColor = UIColor(hue: CGFloat(linearView.subviews.count % 10 / 10), saturation: 1, brightness: 1, alpha: 1)
         let tap = UITapGestureRecognizer(target: self, action: #selector(subviewDidTap(sender:)))
         label.addGestureRecognizer(tap)
