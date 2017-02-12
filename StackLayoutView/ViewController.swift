@@ -10,25 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var layoutView: UIStackLayoutView = UIStackLayoutView()
+    var hiddenViews: [UIView] = []
     
     @IBOutlet weak var linearView: UIStackLayoutView!
+    
     @IBOutlet weak var spaceInset: UIStepper!
     
     @IBOutlet weak var container: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        container.addSubview(layoutView)
-//        layoutView.backgroundColor = UIColor.cyan
-//        layoutView.translatesAutoresizingMaskIntoConstraints = false
-////        layoutView.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: 0).isActive = true
-//        let centerX = NSLayoutConstraint(item: layoutView, attribute: .centerX, relatedBy: .equal, toItem: container, attribute: .centerX, multiplier: 1.0, constant: 0)
-//        container.addConstraint(centerX)
-//        let bottom = NSLayoutConstraint(item: layoutView, attribute: .top, relatedBy: .equal, toItem: spaceInset, attribute: .bottom, multiplier: 1.0, constant: 20)
-//        container.addConstraint(bottom)
-        
-        // Do any additional setup after loading the view, typically from a nib.
+
     }
     
     
@@ -71,8 +63,8 @@ class ViewController: UIViewController {
     @IBAction func addsubviewClick(_ sender: UIButton) {
 
         let maxNumber = CGFloat(max(30, Int(arc4random() % 100)))
-        let text = "AutoLinearLayoutView"
-        let point = sender.convert(CGPoint.init(x: sender.frame.width/2 , y: sender.frame.height/2 ), to: layoutView)
+        let text = "hidden"
+        let point = sender.convert(CGPoint.init(x: sender.frame.width/2 , y: sender.frame.height/2 ), to: linearView)
         let label = UILabel(frame: CGRect(origin: point, size: CGSize.zero))
         label.font = UIFont.systemFont(ofSize: maxNumber)
         let count = linearView.subviews.count
@@ -80,6 +72,7 @@ class ViewController: UIViewController {
         let end = text.index(start, offsetBy: 1)
         let range = Range(uncheckedBounds: (lower: start, upper: end))
         label.text = text.substring(with: range)
+        label.text = text
         label.backgroundColor = UIColor(hue: CGFloat(linearView.subviews.count % 10 / 10), saturation: 1, brightness: 1, alpha: 1)
         let tap = UITapGestureRecognizer(target: self, action: #selector(subviewDidTap(sender:)))
         label.addGestureRecognizer(tap)
@@ -91,11 +84,17 @@ class ViewController: UIViewController {
     }
     
     func subviewDidTap(sender: UITapGestureRecognizer) -> Void {
-//        sender.view?.removeFromSuperview()
-        sender.view?.isHidden = true
-        UIView.animate(withDuration: 0.3) { 
-            self.view.layoutIfNeeded()
+        if let view = sender.view {
+            view.isHidden = !view.isHidden
+            if view.isHidden {
+                hiddenViews.append(view)
+            }
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+
         }
+        
     }
     
     @IBAction func clearSubviewClick(_ sender: UIButton) {
@@ -104,6 +103,15 @@ class ViewController: UIViewController {
             self.view.layoutIfNeeded()
         }
     }
+    
+    @IBAction func showSubview(_ sender: UIButton) {
+        hiddenViews.forEach { $0.isHidden = false }
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+
+    }
+    
     
 }
 
