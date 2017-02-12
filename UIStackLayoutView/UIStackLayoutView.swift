@@ -93,10 +93,6 @@ public class UIStackLayoutView: UIView {
     
     fileprivate(set) var arrangedSubviews: [UIView] = []
     
-    fileprivate var hiddenSubviews: [UIView] = []
-    
-    fileprivate var originalSubviews: [UIView] = []
-    
     private var NSIBPrototypingLayoutConstraint: AnyClass? {
         get {
             return NSClassFromString("NSIBPrototypingLayoutConstraint")
@@ -131,8 +127,7 @@ public class UIStackLayoutView: UIView {
         #if !TARGET_INTERFACE_BUILDER
             subview.translatesAutoresizingMaskIntoConstraints = false
         #endif
-        originalSubviews.append(subview)
-        arrangedSubviews = originalSubviews
+        arrangedSubviews.append(subview)
         arrangedSubviewUpdateConstraints()
         registerListen(view: subview)
         
@@ -140,8 +135,7 @@ public class UIStackLayoutView: UIView {
     
     public override func willRemoveSubview(_ subview: UIView) {
         super.willRemoveSubview(subview)
-        originalSubviews = originalSubviews.filter({$0 != subview })
-        arrangedSubviews = originalSubviews
+        arrangedSubviews = arrangedSubviews.filter({$0 != subview })
         arrangedSubviewUpdateConstraints()
         unregisterListen(view: subview)
         
@@ -355,14 +349,17 @@ private extension UIStackLayoutView {
         }
         
         spaceConstraints.forEach{
-            $0.constant = spacing
-            if isHidden(view: $0.firstItem as? UIView) {
+            let showViews = subviews.filter({ !$0.isHidden })
+            $0.constant = showViews.count > 1 ? spacing : 0.0
+            let currentView = $0.firstItem as? UIView
+            if isHidden(view: currentView) || currentView == showViews.first {
+                // fix bug: 如果当前view是没有隐藏的view中的第一个，则设置其space(间距)==0
                 $0.constant = 0.0
             }
         }
         
-        
-        let totalSpacing = spaceConstraints.map({$0.constant}).reduce(0, +)//subviews.count > 1 ? spacing * CGFloat(subviews.count - 1) : 0
+        // fix bug: 如果显示的view只有一个时，则space=0
+        let totalSpacing = subviews.filter{!$0.isHidden}.count > 1 ? spaceConstraints.map({$0.constant}).reduce(0, +) : 0
         sizeConstraints.forEach {
             if $0.firstAttribute == .width {
                 $0.constant = padding.left + padding.right + (axis == .horizontal ? totalSpacing : 0)
