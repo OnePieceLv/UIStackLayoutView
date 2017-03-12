@@ -215,6 +215,8 @@ private extension UIStackLayoutView {
             
             let nonAxailHugging = (axis == .horizontal) ? huggingVertical : huggingHorizontal
             let nonAxailCompression = (axis == .horizontal) ? compressionVertical : compressionHorizontal
+            let axialHugging = (axis == .horizontal) ? huggingVertical : huggingHorizontal
+            
             let relations = [NSLayoutRelation.lessThanOrEqual, .greaterThanOrEqual]
             for relation in  relations {
                 self.buildConstraints(item: subview, attribute: nonAxialAttriStart, relatedBy: relation, toItem: self, attribute: nonAxialAttriStart, block: { (start: NSLayoutConstraint) in
@@ -280,6 +282,16 @@ private extension UIStackLayoutView {
             }
             
             if !isValidIntrinsicContentSize(size: subview.intrinsicContentSize) {
+                
+                if axialHugging < weak {
+                    // axial filling for low hugging sub view
+                    let start = NSLayoutConstraint(item: subview, attribute: axialAttriStart, relatedBy: .lessThanOrEqual, toItem: nil, attribute: axialAttriStart, multiplier: 1.0, constant: 0)
+                    let end = NSLayoutConstraint(item: subview, attribute: axialAttriEnd, relatedBy: .lessThanOrEqual, toItem: nil, attribute: axialAttriEnd, multiplier: 1.0, constant: 0)
+                    start.priority = medium
+                    end.priority = medium
+                    subViewConstraints.append(start)
+                    subViewConstraints.append(end)
+                }
                 
                 if !(subview is UIStackLayoutView) {
                     let widthHug = NSLayoutConstraint(item: subview, attribute: .width, relatedBy: .lessThanOrEqual, toItem: nil, attribute: .width, multiplier: 1.0, constant: 0)
